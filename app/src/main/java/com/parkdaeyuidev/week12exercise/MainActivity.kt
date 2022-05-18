@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     var inputNum = 0
     var tempNum = 0
     var isRestart = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,23 +31,27 @@ class MainActivity : AppCompatActivity() {
 
     fun setupEvents(){
         startBtn.setOnClickListener {
-            if(isRestart == true){
-                repeatQuest = 0
-                correctNums.clear()
-                mQuestionList.clear()
-                mQuestAdapter.notifyDataSetChanged()
-            }
-            repeatTxt.text = "질문 횟수 : $repeatQuest"
-            myNums = arrayListOf(0,0,0)
-            startBtn.isEnabled = false
-            inputNumEdt.isEnabled = true
-            answerBtn.isEnabled = true
-            activeTxt.text = "게임 시작"
-            setCorrectNum()
+            startSet()
         }
         answerBtn.setOnClickListener {
             userInput()
          }
+    }
+
+    fun startSet(){
+        if(isRestart == true){
+            repeatQuest = 0
+            correctNums.clear()
+            mQuestionList.clear()
+            mQuestAdapter.notifyDataSetChanged()
+        }
+        repeatTxt.text = "질문 횟수 : $repeatQuest"
+        myNums = arrayListOf(0,0,0)
+        startBtn.isEnabled = false
+        inputNumEdt.isEnabled = true
+        answerBtn.isEnabled = true
+        activeTxt.text = "게임 시작"
+        setCorrectNum()
     }
 
     fun setCorrectNum(){
@@ -69,21 +74,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun userInput(){
-        inputNum = inputNumEdt.text.toString().toInt()
-        inputNumEdt.text.clear()
-        tempNum = inputNum
-        if(inputNum in 111..999){
-            for(i in 0..2){
-                myNums[i] = inputNum % 10;
-                inputNum /= 10;
-                if (inputNum == 0){
-                    break
-                }
-            }
+        if(inputNumEdt.text.toString() == ""){
+            Toast.makeText(this, "값을 입력해주세요", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show()
+            inputNum = inputNumEdt.text.toString().toInt()
+            inputNumEdt.text.clear()
+            tempNum = inputNum
+            if(inputNum in 111..999){
+                for(i in 0..2){
+                    myNums[i] = inputNum % 10;
+                    inputNum /= 10;
+                    if (inputNum == 0){
+                        break
+                    }
+                }
+            } else {
+                Toast.makeText(this, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show()
+            }
+            checkNum()
         }
-        checkNum()
+
     }
     fun checkNum(){
         var strike = 0

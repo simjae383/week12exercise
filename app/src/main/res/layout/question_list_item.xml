@@ -26,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="입력값 : "
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <TextView
@@ -34,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="000"
                 android:textSize="14sp"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -47,11 +49,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:textColor="@color/black"
                 android:text="결과값 : "/>
             <TextView
                 android:id="@+id/outputTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="000"/>
