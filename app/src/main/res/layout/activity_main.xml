@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
+    android:gravity="center"
     tools:context=".MainActivity">
 
     <TextView
@@ -38,10 +39,8 @@
     <ListView
         android:id="@+id/questionListView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_marginTop="20dp"/>
-
-
 
     <EditText
         android:id="@+id/inputNumEdt"
@@ -50,6 +49,7 @@
         android:inputType="number"
         android:maxLines="1"
         android:imeOptions="actionDone"
+        android:enabled="false"
         android:hint="세자리 숫자 입력"
         android:layout_marginTop="20dp"/>
 
@@ -66,5 +66,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="시작하기"/>
-
 </LinearLayout>

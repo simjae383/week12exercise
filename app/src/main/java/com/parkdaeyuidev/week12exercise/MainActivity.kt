@@ -16,25 +16,32 @@ class MainActivity : AppCompatActivity() {
     var myNums = ArrayList<Int>()
     var correctNums = ArrayList<Int>()
     var repeatQuest = 0
-    var goodJob = false
+    var inputNum = 0
+    var tempNum = 0
+    var isRestart = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mQuestionList.add(QuestionData(111,"틀렸습니다."))
-
         mQuestAdapter = QuestionAdapter(this, R.layout.question_list_item, mQuestionList)
         questionListView.adapter = mQuestAdapter
-        //setupEvents()
+        setupEvents()
     }
 
     fun setupEvents(){
         startBtn.setOnClickListener {
+            if(isRestart == true){
+                repeatQuest = 0
+                correctNums.clear()
+                mQuestionList.clear()
+                mQuestAdapter.notifyDataSetChanged()
+            }
+            repeatTxt.text = "질문 횟수 : $repeatQuest"
             myNums = arrayListOf(0,0,0)
             startBtn.isEnabled = false
-            inputNumEdt.isEnabled =true
+            inputNumEdt.isEnabled = true
             answerBtn.isEnabled = true
-            activeTxt.text = "게임 시작되었습니다."
+            activeTxt.text = "게임 시작"
             setCorrectNum()
         }
         answerBtn.setOnClickListener {
@@ -53,20 +60,19 @@ class MainActivity : AppCompatActivity() {
                         break;
                     }
                 }
-                if(isRepeatOk == false){
+                if(!isRepeatOk){
                     correctNums.add(randomNum)
                     break;
                 }
             }
         }
-        Log.d("answer", "정답 ${correctNums[0]} ${correctNums[1]} ${correctNums[2]}")
     }
 
     fun userInput(){
-        var inputNum = inputNumEdt.text.toString().toInt()
-        var isRangeOk = false
-        if(111 <= inputNum && inputNum <= 999){
-            isRangeOk = true
+        inputNum = inputNumEdt.text.toString().toInt()
+        inputNumEdt.text.clear()
+        tempNum = inputNum
+        if(inputNum in 111..999){
             for(i in 0..2){
                 myNums[i] = inputNum % 10;
                 inputNum /= 10;
@@ -75,13 +81,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else {
-
+            Toast.makeText(this, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show()
         }
-        Toast.makeText(this, "체크", Toast.LENGTH_SHORT).show()
         checkNum()
     }
     fun checkNum(){
-
         var strike = 0
         var balls = 0
         var resultMsg = ""
@@ -97,10 +101,22 @@ class MainActivity : AppCompatActivity() {
         }
         if (strike == 3){
             resultMsg = "정답입니다. ${repeatQuest}회만에 맞추셨습니다."
-            goodJob = true
+            goodJob()
         } else {
-            resultMsg = "틀렸습니다. ${strike} 스트라이크, ${balls} 볼입니다."
+            resultMsg = "틀렸습니다. $strike 스트라이크, $balls 볼입니다."
+            repeatQuest++
         }
+        Toast.makeText(this, resultMsg, Toast.LENGTH_SHORT).show()
+        repeatTxt.text = "질문 횟수 : $repeatQuest"
+        mQuestionList.add(QuestionData(tempNum, resultMsg))
+        mQuestAdapter.notifyDataSetChanged()
+    }
 
+    private fun goodJob(){
+        activeTxt.text = "정답입니다."
+        answerBtn.isEnabled = false
+        startBtn.isEnabled = true
+        inputNumEdt.isEnabled = false
+        isRestart = true
     }
 }
