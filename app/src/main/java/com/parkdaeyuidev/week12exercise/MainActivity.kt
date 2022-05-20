@@ -2,13 +2,15 @@ package com.parkdaeyuidev.week12exercise
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import com.parkdaeyuidev.week12exercise.adapters.QuestionAdapter
+import com.parkdaeyuidev.week12exercise.databinding.ActivityMainBinding
 import com.parkdaeyuidev.week12exercise.models.QuestionData
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
+
     var mQuestionList = ArrayList<QuestionData>()
 
     lateinit var mQuestAdapter : QuestionAdapter
@@ -22,18 +24,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         mQuestAdapter = QuestionAdapter(this, R.layout.question_list_item, mQuestionList)
-        questionListView.adapter = mQuestAdapter
+        binding.questionListView.adapter = mQuestAdapter
         setupEvents()
     }
 
     fun setupEvents(){
-        startBtn.setOnClickListener {
+        binding.startBtn.setOnClickListener {
             startSet()
         }
-        answerBtn.setOnClickListener {
+        binding.answerBtn.setOnClickListener {
             userInput()
          }
     }
@@ -45,12 +47,12 @@ class MainActivity : AppCompatActivity() {
             mQuestionList.clear()
             mQuestAdapter.notifyDataSetChanged()
         }
-        repeatTxt.text = "질문 횟수 : $repeatQuest"
+        binding.repeatTxt.text = "질문 횟수 : $repeatQuest"
         myNums = arrayListOf(0,0,0)
-        startBtn.isEnabled = false
-        inputNumEdt.isEnabled = true
-        answerBtn.isEnabled = true
-        activeTxt.text = "게임 시작"
+        binding.startBtn.isEnabled = false
+        binding.inputNumEdt.isEnabled = true
+        binding.answerBtn.isEnabled = true
+        binding.activeTxt.text = "게임 시작"
         setCorrectNum()
     }
 
@@ -74,11 +76,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun userInput(){
-        if(inputNumEdt.text.toString() == ""){
+        if(binding.inputNumEdt.text.toString() == ""){
             Toast.makeText(this, "값을 입력해주세요", Toast.LENGTH_SHORT).show()
         } else {
-            inputNum = inputNumEdt.text.toString().toInt()
-            inputNumEdt.text.clear()
+            inputNum = binding.inputNumEdt.text.toString().toInt()
+            binding.inputNumEdt.text.clear()
             tempNum = inputNum
             if(inputNum in 111..999){
                 for(i in 0..2){
@@ -93,7 +95,6 @@ class MainActivity : AppCompatActivity() {
             }
             checkNum()
         }
-
     }
     fun checkNum(){
         var strike = 0
@@ -117,16 +118,16 @@ class MainActivity : AppCompatActivity() {
             repeatQuest++
         }
         Toast.makeText(this, resultMsg, Toast.LENGTH_SHORT).show()
-        repeatTxt.text = "질문 횟수 : $repeatQuest"
+        binding.repeatTxt.text = "질문 횟수 : $repeatQuest"
         mQuestionList.add(QuestionData(tempNum, resultMsg))
         mQuestAdapter.notifyDataSetChanged()
     }
 
     private fun goodJob(){
-        activeTxt.text = "정답입니다."
-        answerBtn.isEnabled = false
-        startBtn.isEnabled = true
-        inputNumEdt.isEnabled = false
+        binding.activeTxt.text = "정답입니다."
+        binding.answerBtn.isEnabled = false
+        binding.startBtn.isEnabled = true
+        binding.inputNumEdt.isEnabled = false
         isRestart = true
     }
 }
